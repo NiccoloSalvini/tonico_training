@@ -1,0 +1,45 @@
+
+ /* header 
+.main-header .logo {
+  font-family: "Georgia", Times, "Times New Roman", serif;
+  font-weight: bold;
+  font-size: 24px;
+}
+
+
+/* Get a fancy font from Google Fonts (Roboto) */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap');
+
+ /* header */
+.main-header .logo {
+  font-family: font-family: 'Roboto', sans-serif;
+  font-weight: bold;
+  font-size: 24px;
+}
+
+
+
+/*
+body {
+  background-color: black;
+  color: white; 
+}
+/*
+
+
+/* Change header text to imported font */
+
+/*
+h2 {
+  font-family: 'Yusei Magic', sans-serif;
+}
+/*
+
+
+/* Make text visible on inputs */
+
+/*
+.shiny-input-container {
+  color: #474747;
+}
+/*
