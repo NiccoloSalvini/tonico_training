@@ -209,7 +209,7 @@ body <- dashboardBody(
       fluidRow(
         ## db display
         tabBox(
-          title = "Athletes table", side  = "left"
+          title = "Athletes table", side  = "left",
           reactableOutput("table")
           )
         )
@@ -316,11 +316,16 @@ ui <- dashboardPage(
   output$table <- renderReactable({
     reactable(fake_db, filterable = TRUE, 
               showPageSizeOptions = TRUE,
+              highlight = TRUE,
               columns = list(
-                bmi_index = colDef(filterable = FALSE),
-                height = colDef(filterable = FALSE),
-                weight = colDef(filterable = FALSE)
+                bmi_index = colDef(filterable = FALSE, format = colFormat(digits = 2)),
+                height = colDef(filterable = FALSE, format = colFormat(digits = 2)),
+                weight = colDef(filterable = FALSE,  format = colFormat(digits = 2))
                 ),
+              theme = reactableTheme(
+                borderColor = "#8a2f2c",
+                stripedColor = "#8a2f2c"
+                )
               )
   })
 
