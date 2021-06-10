@@ -1,0 +1,51 @@
+---
+title: |
+  <div><b>Test and Item Analysis Report</b><img src="hexbin_html.png" width="160"></img></div>
+
+  **************
+  
+output:
+    html_document2:
+       number_sections: false
+       toc: true
+author: |
+  `r ifelse(params$dataset == "", "", params$dataset)`
+  
+  `r ifelse(params$author == "", "", params$author)`
+  
+  This report was created on `r format(Sys.Date(), "%d.%m.%Y")`
+
+  &copy; 2021 ShinyItemAnalysis: Test and item analysis, version `packageVersion("ShinyItemAnalysis")`
+    
+  **************
+  
+params:
+  author: NA
+  dataset: NA
+---
+
+---
+pagetitle: `r ifelse(params$dataset == "", "", params$dataset)`
+---   
+
+<style>
+body {text-align: justify}
+</style>
+**************
+
+# Introduction
+
+This report was created by R version `r getRversion()` and its package ShinyItemAnalysis version `packageVersion("ShinyItemAnalysis")`. ShinyItemAnalysis provides test and item analysis and it is available on [CRAN](https://CRAN.R-project.org/package=ShinyItemAnalysis) and also [online](https://shiny.cs.cas.cz/ShinyItemAnalysis/). 
+
+To cite ShinyItemAnalysis application in publications, please, use:
+
+
+  Martinkova P., \& Drabinova A.
+  (2018)
+  ShinyItemAnalysis for teaching psychometrics and to enforce routine analysis of educational tests. 
+  The R Journal, 10(2), 503-515.
+  [doi: 10.32614/RJ-2018-074](https://doi.org/10.32614/RJ-2018-074)
+  
+  
+This program is free software and you can redistribute it and or modify it under the terms of the GNU GPL 3 as published by the Free Software Foundation. This program is distributed in the hope that it will be useful, but without any warranty; without even the implied warranty of merchantability of fitness for a particular purpose. Visit [www.ShinyItemAnalysis.org](http://www.shinyitemanalysis.org/) to learn more!
+

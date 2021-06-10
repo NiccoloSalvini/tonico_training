@@ -1,9 +1,12 @@
 ---
 author: "Dr. Giacomo Peggion"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
-params: my_vals
+params:
+  author:  NA
+  dataset: NA
 output:
   word_document:
+    toc: true
     reference_docx: word_temp.docx
     fig_height: 5
     fig_width: 5
@@ -12,6 +15,15 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
+
+
+## tests
+
+params: 
+
+- author: `r params$author`
+- dataset: `r params$dataset`
 
 ## Diet Program 
 

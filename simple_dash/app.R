@@ -4,6 +4,9 @@
 
 library(shinydashboard)
 library(fontawesome)
+library(glue)
+library(here)
+source(here::here("simple_dash", "theme_TT.R"))
 
 ### header ----
 header <- dashboardHeader(
@@ -98,6 +101,8 @@ body <- dashboardBody(
   tags$head(
     tags$link(rel = "stylesheet", type = "text/css", href = "style.css")
   ),
+
+  ## DIET ----
   tabItems(
     tabItem(
       tabName = "diet",
@@ -106,24 +111,80 @@ body <- dashboardBody(
           title = "Remeber Text Box",
           # The id lets us use input$tabset1 on the server to find the current tab
           id = "tabset1", side = "right", height = "250px",
-          textAreaInput("remember", label = tags$p(fa("pencil", fill = "red",height = "20px"), "Type in..."), height = "100px")
+          textAreaInput("remember", label = tags$p(fa("pencil", fill = "red", height = "20px"), "Type in..."), height = "100px")
         ),
         tabBox(
           title = "Goal Text Box",
           id = "tabset1", side = "left", height = "250px",
-          textAreaInput("goal", label = tags$p(fa("pencil", fill = "red",height = "20px"), "Type in..."), height = "100px")
+          textAreaInput("goal", label = tags$p(fa("pencil", fill = "red", height = "20px"), "Type in..."), height = "100px")
         ),
-      fluidRow(
-        tabBox(
-          title = "See User Inputs", id = "tabset1", side = "right", height = "250px",
-          DT::dataTableOutput("datatable")
+        fluidRow(
+          tabBox(
+            title = "See User Inputs", id = "tabset1", side = "right", height = "250px",
+            DT::dataTableOutput("datatable")
+          ),
+          tabBox(
+            title = "Choose Donwload option", id = "tabset3", side = "right", height = "250px",
+
+            ## radio buttons
+            column(2, radioButtons(
+              inputId = "report_format",
+              label = "Format of report",
+              choices = c("HTML" = "html", "PDF" = "pdf", "DOCX" = "docx")
+            )),
+            column(2, textInput(
+              inputId = "reportAuthor",
+              label = "Author"
+            )),
+            column(2, textInput(
+              inputId = "reportDataName",
+              label = "Dataset"
+            )),
+            column(
+              2,
+              h4("Content of report... ")
+              
+            ),
+            # downloadButton(
+            #   outputId = 'report_gen',
+            #   label = "Create my report"
+            # ),
+            tags$hr(),
+            br(),
+            br(),
+            # * DOWNLOAD ####
+            p(
+              strong("Recommendation: "), "Report generation can be faster and more reliable when you first check
+             sections of intended contents. For example, if you wish to include a ", strong("3PL IRT"),
+              " model, you can first visit the ", strong("Dichotomous models"), " subsection of the ",
+              strong("IRT models"), "section and fit the ", strong("3PL IRT"), " model."
+            ),
+            br(),
+            div(
+              style = "display:inline-block",
+              actionButton(
+                inputId = "generate",
+                label = "Generate report",
+                class = "btn btn-primary",
+                icon = icon("bar-chart-o")
+              )
+            ),
+            tags$style(
+              HTML("#download_report_button { margin-left: 25px }")
+              ),
+            div(
+              style = "display:inline-block",
+              uiOutput("download_report_button")
+              )
           )
         )
       ),
     ),
+
+    ## DASH ----
     tabItem(
       tabName = "dash",
-      
+
       ## INFOBOXES
       fluidRow(
         ## STatic infoBoxes
@@ -144,7 +205,6 @@ body <- dashboardBody(
         tabBox(
           # Clicking this will increment the progress amount
           box(width = 4, actionButton("count", "Increment progress"))
-  
         )
       )
     )
@@ -162,6 +222,52 @@ ui <- dashboardPage(
 
 
 server <- function(input, output) {
+
+  
+  # gen a REPORT
+  ###  PROGRESS bar ----
+  observeEvent(input$generate, {
+    withProgress(message = "Creating content", value = 0, style = "notification", {
+      list( # header
+        author = input$reportAuthor,
+        dataset = input$reportDataName
+      )
+    })
+  })
+  
+  output$download_report_button <- renderUI({
+    if (is.null(input$generate)) {
+      return(NULL)
+    }
+    downloadButton(
+      outputId = "report",
+      label = "Download report",
+      class = "btn btn-primary"
+    )
+  })
+
+
+  ###  download Report ---
+  output$report <- downloadHandler(
+    filename = reactive({
+      paste0("report.", input$report_format)
+    }),
+    content = function(file) {
+      reportPath <- here::here("simple_dash", glue::glue("report{input$report_format}.Rmd"))
+      parameters <- list(
+        author = input$reportAuthor,
+        dataset = input$reportDataName
+      )
+      rmarkdown::render(reportPath,
+        output_file = file,
+        params = parameters,
+        envir = new.env(parent = globalenv())
+      )
+    }
+  )
+
+  ### info BOXES ----
+
   output$progressBox <- renderInfoBox({
     infoBox(
       "Progress", paste0(25 + input$count, "%"),
@@ -200,6 +306,45 @@ server <- function(input, output) {
       stringsAsFactors = FALSE
     )
   })
+
+  
+  
+  
+  # old download buttons
+# output$report_gen <- downloadHandler(
+# 
+#   filename = "",
+#   content = function(file) {
+#     # copy markdown report file to a temporary directory before knitting it with the
+#     # selected dataset. This is useful if we don't have write permissions for the current
+#     # working directory
+#     temp_report <- file.path(tempdir(), "report_temp.docx")
+#     message("\n... report_temp path: ", temp_report, "\n")
+# 
+#     # copy the report template into the temp directory
+#     file.copy(here::here("shiny_report_gen", "report_temp.docx"),
+#               temp_report, overwrite = TRUE)
+# 
+#     # create a named list of parameters to pass to to Rmd template.
+#     # can also pass reactiveValues or reactive objects
+#     pass_params <- list(
+#       imported = my_vals
+#     )
+# 
+#     # knit the document, passing in the `pass_params` list, and evaluate it in a
+#     # child of the global environment (this isolates the code in the document
+#     # from the code in the app).
+#     rmarkdown::render(
+#       temp_report,
+#       output_file = file,
+#       params = pass_params,
+#       envir = new.env(parent = globalenv())
+#     )
+# 
+#   }
+# 
+# )
+
 }
 
 shinyApp(ui, server)
