@@ -6,7 +6,10 @@ library(shinydashboard)
 library(fontawesome)
 library(glue)
 library(here)
+  library(reactable)
 source(here::here("simple_dash", "theme_TT.R"))
+readRDS(here::here("simple_dash","data", "fake_db.Rds"))
+
 
 ### header ----
 header <- dashboardHeader(
@@ -142,7 +145,8 @@ body <- dashboardBody(
             )),
             column(
               2,
-              h4("Content of report... ")
+              h4("Content of report... "), 
+              downloadButton('report_gen')
               
             ),
             # downloadButton(
@@ -169,13 +173,8 @@ body <- dashboardBody(
                 icon = icon("bar-chart-o")
               )
             ),
-            tags$style(
-              HTML("#download_report_button { margin-left: 25px }")
-              ),
-            div(
-              style = "display:inline-block",
-              uiOutput("download_report_button")
-              )
+            tags$style(HTML("#download_report_button { margin-left: 25px }")),
+            div(style = "display:inline-block", uiOutput("download_report_button"))
           )
         )
       ),
@@ -184,6 +183,13 @@ body <- dashboardBody(
     ## DASH ----
     tabItem(
       tabName = "dash",
+      fluidRow(
+  
+        selectInput("athlete", "Athelete Name",
+                    fake_db$name),
+        selectInput("athlete", "Athelete Surname",
+                    fake_db$surname)
+      ),
 
       ## INFOBOXES
       fluidRow(
@@ -193,7 +199,6 @@ body <- dashboardBody(
         infoBoxOutput("progressBox"),
         infoBoxOutput("approvalBox")
       ),
-
       # infoBoxes with fill=TRUE
       fluidRow(
         infoBox("New Orders", 10 * 2, icon = icon("credit-card"), fill = TRUE),
@@ -202,13 +207,14 @@ body <- dashboardBody(
       ),
 
       fluidRow(
+        ## db display
         tabBox(
-          # Clicking this will increment the progress amount
-          box(width = 4, actionButton("count", "Increment progress"))
+          title = "Athletes table", side  = "left"
+          reactableOutput("table")
+          )
         )
       )
     )
-  )
 )
 
 
@@ -221,7 +227,7 @@ ui <- dashboardPage(
 
 
 
-server <- function(input, output) {
+  server <- function(input, output) {
 
   
   # gen a REPORT
@@ -305,6 +311,17 @@ server <- function(input, output) {
       Goal = input$remember,
       stringsAsFactors = FALSE
     )
+  })
+  
+  output$table <- renderReactable({
+    reactable(fake_db, filterable = TRUE, 
+              showPageSizeOptions = TRUE,
+              columns = list(
+                bmi_index = colDef(filterable = FALSE),
+                height = colDef(filterable = FALSE),
+                weight = colDef(filterable = FALSE)
+                ),
+              )
   })
 
   

@@ -7,4 +7,4 @@ $(function() {
         'is completed. \n \n (Press "OK" to start report downloading.)'
     );
     /*setInterval();*/
-  });
+  }); 
