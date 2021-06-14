@@ -6,9 +6,10 @@ library(shinydashboard)
 library(fontawesome)
 library(glue)
 library(here)
-  library(reactable)
+library(reactable)
+library(ggplot2)
 source(here::here("simple_dash", "theme_TT.R"))
-readRDS(here::here("simple_dash","data", "fake_db.Rds"))
+fake_db = readRDS(here::here("simple_dash","data", "fake_db.Rds"))
 
 
 ### header ----

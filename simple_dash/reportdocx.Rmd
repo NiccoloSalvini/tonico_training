@@ -1,4 +1,5 @@
 ---
+title: "scheda"
 author: "Dr. Giacomo Peggion"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 params:
@@ -7,7 +8,7 @@ params:
 output:
   word_document:
     toc: true
-    reference_docx: word_temp.docx
+    reference_docx: word_temp2.docx
     fig_height: 5
     fig_width: 5
 ---
@@ -34,6 +35,10 @@ When you click the **Knit** button a document will be generated that includes bo
 ```{r cars}
 summary(cars)
 ```
+
+##
+
+
 
 ## Including Plots
 
