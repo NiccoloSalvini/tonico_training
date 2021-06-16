@@ -1,10 +1,11 @@
 ---
-title: "scheda"
 author: "Dr. Giacomo Peggion"
-date: "`r format(Sys.time(), '%d %B, %Y')`"
 params:
   author:  NA
-  dataset: NA
+  date: NA
+  remember: NA
+  goal: NA
+  client: NA
 output:
   word_document:
     toc: true
@@ -17,14 +18,37 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+# Client: `r params$client`
 
+
+<!-- page break script in word -->
+```{=openxml}
+<w:p><w:r><w:br w:type="page"/></w:r></w:p>
+```
 
 ## tests
 
 params: 
 
 - author: `r params$author`
-- dataset: `r params$dataset`
+- date: `r params$dataset`
+
+
+<!-- page break script in word -->
+```{=openxml}
+<w:p><w:r><w:br w:type="page"/></w:r></w:p>
+```
+
+## Goal:
+
+`r params$goal`
+
+
+## Remeber:
+
+
+`r params$remember`
+
 
 ## Diet Program 
 
@@ -36,7 +60,7 @@ When you click the **Knit** button a document will be generated that includes bo
 summary(cars)
 ```
 
-##
+#####
 
 
 
@@ -44,8 +68,20 @@ summary(cars)
 
 You can also embed plots, for example:
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+```{r TryPlot, echo=FALSE}
+library(ggplot2)
+library(tidyverse)
+library(tidyr)
+readRDS(here::here("simple_dash","data", "fake_db.Rds")) %>%
+  count(weight_class, sort = T) %>% 
+  ggplot(aes(x = n,y = fct_reorder(weight_class, n), fill =weight_class  ))+
+  geom_col(show.legend = F) +
+  labs(
+    x = "",
+    y = "") +
+  theme_bw()
+  
+
 ```
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

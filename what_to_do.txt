@@ -1,7 +1,0 @@
-shiny app which triggers a .Rmd report based on a tex templates:
-
-Benefits:
-- shiny app scalable
-- bootstrap
-- extent many document formats
-- highly customizable
