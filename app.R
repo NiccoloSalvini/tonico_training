@@ -253,20 +253,21 @@ body <- dashboardBody(
     ### database ----
     tabItem(
       tabName = "db",
-      fluidRow(
-        infoBox("sa", 25 ,  icon = icon("table")),
-        tabBox(
-          title = "prova DB",
-          id = "provadb", side = "left", height = "250px",
-          textAreaInput("provadbArea", label = tags$p(fa("fas fa-pencil-alt", fill = "red", height = "20px"), "Type in..."), height = "100px")
-        ),
-        )
+      fluidPage(
+        shinyFeedback::useShinyFeedback(),
+        shinyjs::useShinyjs(),
+        # Application Title
+        h1("Explore Yssup records", align = 'center'),
+        yssup_table_module_ui("yssup_table")
+      )
+     
       )
     )
 )
 
 ## * UI ----
 ui <- dashboardPage(
+
   skin = "red",
   header,
   sidebar,
@@ -275,7 +276,12 @@ ui <- dashboardPage(
 
 
 ## * Server ----
-server <- function(input, output) {
+server <- function(input, output, session) {
+  
+  ## module call
+  session$userData$email <- 'niccolo.salvini27@gmail.com'
+  print(getwd())
+  
   
   ###  progress bar ----
   observeEvent(input$generate, {
@@ -393,7 +399,15 @@ server <- function(input, output) {
                 )
               )
   })
+  
+  
+
+  # Call the server function portion of the `yssup_table_module.R` module file
+  callModule(
+    yssup_table_module,
+     "yssup_table"
+  )
 
 }
 
-shinyApp(ui, server)
+shinyApp(ui,server)
