@@ -94,12 +94,18 @@ sidebar <- dashboardSidebar(
   ),
   sidebarMenu(
     menuItem("Athlete Dashboard", tabName = "dash", icon = icon("dashboard")),
-    menuItem("Exercises", tabName = "exercises", icon = icon("running")),
-    menuItem("Diet", tabName = "diet", icon = icon("pizza-slice"))
+    menuItem("Diet", tabName = "diet", icon = icon("pizza-slice")),
+    menuItem("Exercises", tabName = "exercises", icon = icon("running")), 
+    menuItem("Database", tabName = "db", icon = icon("database")),
+    menuItem("Form", tabName = "form", icon = icon("list-ul"))
+    
   ),
+  ## source
+  sidebarMenu(
   menuItem("  Source Code",
     icon = icon("file-code-o"),
     href = "https://github.com/NiccoloSalvini"
+  )
   )
 )
 
@@ -117,20 +123,45 @@ body <- dashboardBody(
     ### diet ----
     tabItem(
       tabName = "diet",
+      
       fluidRow(
+          tabBox(
+            title = "Free Text",
+            id = "freetext", side = "left", height = "250px",
+            textAreaInput("freetextArea", label = tags$p(fa("fas fa-pencil-alt", fill = "red", height = "20px"), "Type in..."), height = "100px")
+          ),
+          tabBox(
+            title = "Remeber Text Box",
+            # The id lets us use input$tabset1 on the server to find the current tab
+            id = "remeberbox", side = "right", height = "250px",
+            textAreaInput("rememberArea", label = tags$p(fa("fas fa-pencil-alt", fill = "red", height = "20px"), "Type in..."), height = "100px")
+          )
+        ),
+      
+      fluidRow(
+        
         tabBox(
-          title = "Remeber Text Box",
-          # The id lets us use input$tabset1 on the server to find the current tab
-          id = "remeberbox", side = "right", height = "250px",
-          textAreaInput("rememberArea", label = tags$p(fa("pencil", fill = "red", height = "20px"), "Type in..."), height = "100px")
+          title = "Every Day tips",
+          id = "everydaytips", side = "left", height = "250px",
+          textAreaInput("tipsArea", label = tags$p(fa("fas fa-pencil-alt", fill = "red", height = "20px"), "Type in..."), height = "100px")
         ),
         tabBox(
           title = "Goal Text Box",
-          id = "goalbox", side = "left", height = "250px",
-          textAreaInput("goalArea", label = tags$p(fa("pencil", fill = "red", height = "20px"), "Type in..."), height = "100px")
+          id = "goalbox", side = "right", height = "250px",
+          textAreaInput("goalArea", label = tags$p(fa("fas fa-pencil-alt", fill = "red", height = "20px"), "Type in..."), height = "100px")
         ),
-        fluidRow(
-          tabBox(
+        
+      fluidRow(
+        
+        tabBox(
+            title = "Daily targets",
+            id = "dailytargets", side = "left", height = "250px",
+            textAreaInput("targetsArea", label = tags$p(fa("fas fa-pencil-alt", fill = "red", height = "20px"), "Type in..."), height = "100px")
+          )),
+      
+      fluidRow(
+        
+        tabBox(
             title = "See User Inputs", id = "tabset1", side = "right", height = "250px",
             DT::dataTableOutput("datatable")
           ),
@@ -140,7 +171,7 @@ body <- dashboardBody(
             column(2, radioButtons(
               inputId = "report_format",
               label = "Format of report",
-              choices = c("HTML" = "html", "PDF" = "pdf", "DOCX" = "docx")
+              choices = c("PDF" = "pdf", "DOCX" = "docx")
             )),
             column(2, textInput(
               inputId = "reportAuthor",
@@ -193,7 +224,7 @@ body <- dashboardBody(
         )),
       ## 1st row infoboxes
       fluidRow(
-        infoBox("BMI index", dplyr::filter(fake_db, surname == enquo(input$athlete) ), icon = icon("heartbeat")),
+        infoBox("BMI index",25, icon = icon("heartbeat"), fill = TRUE),
         infoBoxOutput("progressBox"),
         infoBoxOutput("approvalBox")
       ),
@@ -205,18 +236,31 @@ body <- dashboardBody(
       ),
 
       fluidRow(
-        tabBox(
+        tabPanel(
           title = "Athletes table", side  = "left",
           reactableOutput("table")
           )
         )
       ),
-    ### exercises ----
+    ### form completion ----
     tabItem(
-      tabName = "exercises",
+      tabName = "form",
       fluidRow(
-        infoBox("bih", fake_db, icon = icon("heartbeat")),
-      )
+        infoBox("bih", 25 ,  icon = icon("heartbeat"))
+        )
+      ),
+    
+    ### database ----
+    tabItem(
+      tabName = "db",
+      fluidRow(
+        infoBox("sa", 25 ,  icon = icon("table")),
+        tabBox(
+          title = "prova DB",
+          id = "provadb", side = "left", height = "250px",
+          textAreaInput("provadbArea", label = tags$p(fa("fas fa-pencil-alt", fill = "red", height = "20px"), "Type in..."), height = "100px")
+        ),
+        )
       )
     )
 )
@@ -240,7 +284,11 @@ server <- function(input, output) {
         author = input$reportAuthor,
         date = input$reportDate,
         remember = input$rememberArea,
-        goal = input$goalArea
+        goal = input$goalArea,
+        freetext = input$freetextArea,
+        targets = input$targetsArea,
+        tips = input$tipsArea
+        
       )
     })
   })
@@ -257,20 +305,25 @@ server <- function(input, output) {
     )
   })
 
-
+  
   ###  Download Report ----
   output$report <- downloadHandler(
     filename = reactive({
       paste0("report.", input$report_format)
     }),
     content = function(file) {
-      reportPath <- here::here("simple_dash", glue::glue("report{input$report_format}.Rmd"))
+      
+      reportPath <- here::here(glue::glue("report{input$report_format}.Rmd"))
       parameters <- list(
         author = input$reportAuthor,
         date = input$reportDate,
         remember = input$rememberArea,
         client = input$reportClient,
-        goal = input$goalArea
+        goal = input$goalArea,
+        freetext = input$freetextArea,
+        targets = input$targetsArea,
+        tips = input$tipsArea
+        
       )
       rmarkdown::render(reportPath,
         output_file = file,
@@ -318,6 +371,9 @@ server <- function(input, output) {
       author = input$reportAuthor,
       date = input$reportDate,
       client = input$reportClient,
+      freetext = input$freetextArea,
+      tips = input$tipsArea,
+      targets = input$targetsArea,
       stringsAsFactors = FALSE
     )
   })

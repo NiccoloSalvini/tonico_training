@@ -1,0 +1,56 @@
+---
+params:
+  author: NA
+  date: NA
+  remember: NA
+  goal: NA 
+  client: NA
+  tips: NA
+  freetext: NA
+  targets: NA
+output :
+  bookdown::pdf_document2:
+    fig_caption: yes
+    highlight: tango
+    includes:
+      before_body: before_body.tex
+      in_header: header.tex
+    keep_tex: yes
+    number_sections: yes
+    toc: yes
+geometry: top=2.4cm, bottom=2.1cm, outer=2cm, inner=4cm, headheight=40pt
+lang: en
+documentclass: article
+classoption: a4paper
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Section 1
+## General Advices, 
+
+Hello `r params$client`, I’m happy that you decided to start this journey. Be patient, follow me and results will come.
+This is your personal nutrition plan, it will guide you through your body transformation, that’s why I recommend you read it carefully. Always feel free to ask me questions if needed. 
+As part of this journey together you will be receiving a monthly **transformation report** directly into you inbox at this address (email adress). The report will help you figuring out your results with respect to the _goal_ set.  
+That is when data comes into help. Together with the report you will be asked to fill a brief form from which I will be collecting your measuraments and can suggest different approaches. It will take you no more than 5 minutes.
+
+## Remember `r emo::ji("warning")`
+
+`r params$remember`
+
+## Every day Tips `r emo::ji("flex")`
+
+`r params$tips`
+
+## Daily Targets `r emo::ji("target")` 
+
+`r params$targetsArea`
+
+## A few extra
+\majorstylecolor{\textbackslash majorstylecolor\{Text with same color as main title\}}  
+\urlstylecolor{\textbackslash urlstylecolor\{Text with same color as url\}}  
+\sectionstylecolor{\textbackslash sectionstylecolor\{Text with same color as section title\}}  
+\keyword{\textbackslash keyword\{To put some word in darkred\}}  
+\advert{\textbackslash advert\{To put some words in orange and italic\}}

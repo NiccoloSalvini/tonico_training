@@ -128,6 +128,6 @@ db = tibble(
     ),
     weight_class = as_factor(weight_class)
     ) 
-saveRDS(db, "simple_dash/data/fake_db.Rds")
+saveRDS(db, "data/fake_db.Rds")
 
 
