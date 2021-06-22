@@ -36,6 +36,7 @@ clients_info <- read_excel(here("data", "provided", "fake_clients_info_data.xlsx
     sex = as_factor(sex)
   ) %>% 
   select(-years)
+
 # do(results = gender(.$client_names, years = .$years[1], method = "ssa")) %>%
 # do(bind_rows(.$results))
 
