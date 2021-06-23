@@ -1,0 +1,6 @@
+default:
+  tonico_training_app:
+    host:
+    usename:
+    password:
+    dbname: 
