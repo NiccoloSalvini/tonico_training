@@ -257,8 +257,8 @@ body <- dashboardBody(
         shinyFeedback::useShinyFeedback(),
         shinyjs::useShinyjs(),
         # Application Title
-        h1("Explore Yssup records", align = 'center'),
-        yssup_table_module_ui("yssup_table")
+        h1("Interact with Tonico Traning DB clients", align = 'center'),
+        tt_table_module_ui("tt_table")
       )
      
       )
@@ -402,10 +402,10 @@ server <- function(input, output, session) {
   
   
 
-  # Call the server function portion of the `yssup_table_module.R` module file
+  # Call the server function portion of the `tt_table_module.R` module file
   callModule(
-    yssup_table_module,
-     "yssup_table"
+    tt_table_module,
+     "tt_table"
   )
 
 }
