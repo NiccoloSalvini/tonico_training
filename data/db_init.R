@@ -25,6 +25,10 @@ create_clients_info_query = "CREATE TABLE clients_info (
   sex                             TEXT,
   birthday                        TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   age                             NUMERIC,
+  created_at                      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  created_by                      TEXT,
+  modified_at                     TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  modified_by                     TEXT,
   PRIMARY KEY(uid)
 )"
 
@@ -40,6 +44,10 @@ create_clients_measurements_query = "CREATE TABLE clients_measurements (
   fat                             NUMERIC,
   body_muscle                     NUMERIC,
   muscle                          NUMERIC,
+  created_at                      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  created_by                      TEXT,
+  modified_at                     TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  modified_by                     TEXT,
   PRIMARY KEY(measurement_id),
   CONSTRAINT fk_measurement
     FOREIGN KEY(uid_client) 
@@ -57,7 +65,7 @@ dbExecute(conn, create_clients_info_query)
 dbExecute(conn, create_clients_measurements_query)
 
 # Read in the RDS file created in 'data_prep.R'
-dat <- readRDS("data/prepped/clients_info.RDS")
+dat <- readRDS(here::here("data", "prepped", "clients_info.RDS"))
 
 # add uid column to the `dat` data frame
 # dat$uid <- uuid::UUIDgenerate(n = nrow(dat))
