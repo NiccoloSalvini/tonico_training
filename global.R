@@ -15,12 +15,11 @@ library(config, quietly = T, warn.conflicts = F)
 
 
 conn <- dbConnect(RPostgres::Postgres(),
-                  dbname = "d48t7csiftocvo", 
-                  host='ec2-52-19-96-181.eu-west-1.compute.amazonaws.com', 
+                  dbname = "d3cmoca1tan7ho", 
+                  host='ec2-52-17-1-206.eu-west-1.compute.amazonaws.com', 
                   port="5432", 
-                  user="udknpypytovowv", 
-                  password="6c19e250350d95a8f6fbf83c3bd83ce19e701f6be6497c08a0f943c1021c357f")  
-
+                  user="fnijsgqvdsupca", 
+                  password="8f0ffe72e0468f2a318c70c6a0a70b56d3706ba82112a52fc2e2f97a341469cc") 
 
 # # Create database connection
 # conn <- dbConnect(

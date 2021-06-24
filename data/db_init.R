@@ -71,8 +71,8 @@ dat <- readRDS(here::here("data", "prepped", "clients_info.RDS"))
 # dat$uid <- uuid::UUIDgenerate(n = nrow(dat))
 
 # reorder the columns
-dat <- dat %>%
-  select(uid, everything())
+# dat <- dat %>%
+#   select(uid, everything())
 
 
 # Fill in the postgresql tables with the values from the RDS file
@@ -84,8 +84,9 @@ DBI::dbWriteTable(
   append = TRUE
 )
 
-# List tables to confirm 'mtcars' table exists
+# List tables to confirm 'clients_info' and 'clients_measuraments' tables exist
 dbListTables(conn)
 
 # disconnect from SQLite before continuing
 dbDisconnect(conn)
+
