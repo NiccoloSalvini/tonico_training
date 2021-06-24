@@ -1,7 +1,0 @@
-default:
-  tonico_training_app:
-    dbname: 
-    drv:
-    host:
-    username:
-    password:
