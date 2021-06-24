@@ -1,0 +1,4 @@
+PG_HRK_HOST = "ec2-52-17-1-206.eu-west-1.compute.amazonaws.com"
+PG_HRK_USER = "fnijsgqvdsupca"
+PG_HRK_DBNAM = "d3cmoca1tan7ho"
+PG_HRK_PWD = "8f0ffe72e0468f2a318c70c6a0a70b56d3706ba82112a52fc2e2f97a341469cc"
