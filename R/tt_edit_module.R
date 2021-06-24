@@ -189,7 +189,7 @@ tt_edit_module <- function(input, output, session, modal_title, tt_to_edit, moda
           created_by,
           modified_at,
           modified_by) VALUES
-          ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10m 411, $12, $13, $14)",
+          ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)",
           params = c(
             list(uid),
             unname(dat$data)
