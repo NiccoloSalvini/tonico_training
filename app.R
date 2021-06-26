@@ -11,7 +11,7 @@ library(ggplot2)
 
 ## theme -----
 source(here::here("theme_TT.R"))
-
+source(here::here("global.R"))
 
 ## load data -----
 fake_db = readRDS(here::here("data", "fake_db.Rds"))
