@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021/W32TeX) (preloaded format=pdflatex 2021.6.19)  21 JUN 2021 11:47
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021/W32TeX) (preloaded format=pdflatex 2021.6.19)  25 JUN 2021 13:07
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1097,12 +1097,12 @@ Package pageslts Warning: Counter `page' is zero!
 (pageslts)                this will lead to a counter overflow.
 (pageslts)                 on input line 486.
 
-<Background_Title_deepred_2.png, id=32, 1376.89406pt x 1311.39937pt>
+<Background_Title_deepred_2.png, id=32, 927.465pt x 1311.39937pt>
 File: Background_Title_deepred_2.png Graphic file (type png)
 <use Background_Title_deepred_2.png>
 Package pdftex.def Info: Background_Title_deepred_2.png  used on input line 486
 .
-(pdftex.def)             Requested size: 597.49442pt x 569.07341pt.
+(pdftex.def)             Requested size: 597.52397pt x 844.87563pt.
 [0
 
 {c:/Users/nicco/AppData/Roaming/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdfte
@@ -1161,23 +1161,23 @@ File: Background_Title_deepred_2.png Graphic file (type png)
 <use Background_Title_deepred_2.png>
 Package pdftex.def Info: Background_Title_deepred_2.png  used on input line 554
 .
-(pdftex.def)             Requested size: 597.49442pt x 569.07341pt.
-<Background_deepred_topdown.png, id=55, 927.465pt x 1311.39937pt>
-File: Background_deepred_topdown.png Graphic file (type png)
-<use Background_deepred_topdown.png>
-Package pdftex.def Info: Background_deepred_topdown.png  used on input line 554
-.
 (pdftex.def)             Requested size: 597.52397pt x 844.87563pt.
-[1 <./Background_deepred_topdown.png>]
+<Background_deepred_topdown_2.png, id=55, 927.465pt x 1311.39937pt>
+File: Background_deepred_topdown_2.png Graphic file (type png)
+<use Background_deepred_topdown_2.png>
+Package pdftex.def Info: Background_deepred_topdown_2.png  used on input line 5
+54.
+(pdftex.def)             Requested size: 597.52397pt x 844.87563pt.
+[1 <./Background_deepred_topdown_2.png>]
 File: Background_Title_deepred_2.png Graphic file (type png)
 <use Background_Title_deepred_2.png>
 Package pdftex.def Info: Background_Title_deepred_2.png  used on input line 554
 .
-(pdftex.def)             Requested size: 597.49442pt x 569.07341pt.
-File: Background_deepred_topdown.png Graphic file (type png)
-<use Background_deepred_topdown.png>
-Package pdftex.def Info: Background_deepred_topdown.png  used on input line 554
-.
+(pdftex.def)             Requested size: 597.52397pt x 844.87563pt.
+File: Background_deepred_topdown_2.png Graphic file (type png)
+<use Background_deepred_topdown_2.png>
+Package pdftex.def Info: Background_deepred_topdown_2.png  used on input line 5
+54.
 (pdftex.def)             Requested size: 597.52397pt x 844.87563pt.
 [2 <./reportpdf_files/figure-latex/pressure-1.pdf>]
 \c@pagesLTS.arabic.1.local.count=\count333
@@ -1196,8 +1196,8 @@ Package rerunfilecheck Info: File `reportpdf.out' has not changed.
  ) 
 Here is how much of TeX's memory you used:
  24162 strings out of 480470
- 437169 string characters out of 5897265
- 758970 words of memory out of 5000000
+ 437183 string characters out of 5897265
+ 758972 words of memory out of 5000000
  41373 multiletter control sequences out of 15000+600000
  456162 words of font info for 58 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
@@ -1213,7 +1213,7 @@ onts/type1/public/lm/lmr12.pfb><c:/Users/nicco/AppData/Roaming/TinyTeX/texmf-di
 st/fonts/type1/public/lm/lmr8.pfb><c:/Users/nicco/AppData/Roaming/TinyTeX/texmf
 -dist/fonts/type1/public/lm/lmri10.pfb><c:/Users/nicco/AppData/Roaming/TinyTeX/
 texmf-dist/fonts/type1/public/lm/lmtt10.pfb>
-Output written on reportpdf.pdf (3 pages, 291427 bytes).
+Output written on reportpdf.pdf (3 pages, 291824 bytes).
 PDF statistics:
  129 PDF objects out of 1000 (max. 8388607)
  100 compressed objects within 1 object stream
