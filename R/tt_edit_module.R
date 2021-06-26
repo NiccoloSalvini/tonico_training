@@ -41,7 +41,8 @@ tt_edit_module <- function(input, output, session, modal_title, tt_to_edit, moda
               ns("email"),
               'Client email',
               value = hold$email
-            )),
+              )
+            ),
           column(
             width = 3,
             numericInput(
@@ -61,7 +62,8 @@ tt_edit_module <- function(input, output, session, modal_title, tt_to_edit, moda
               "Date of Birth",
               value = lubridate::today(),
               format = "mm/dd/yy"
-              )),
+              )
+            ),
           column(
             width = 3,
             textInput(
@@ -79,9 +81,10 @@ tt_edit_module <- function(input, output, session, modal_title, tt_to_edit, moda
               'Client Gender',
               choices = c('F', 'M', 'non-binary'),
               selected = ifelse(is.null(hold), "", hold$sex)
-            ))
-          )
-        ),
+              )
+            )
+          ),
+        
         title = modal_title,
         size = 'm',
         footer = list(
@@ -94,6 +97,7 @@ tt_edit_module <- function(input, output, session, modal_title, tt_to_edit, moda
           )
         )
       )
+    )
     
     # Observe event for "Model" text input in Add/Edit tt
     # `shinyFeedback`
