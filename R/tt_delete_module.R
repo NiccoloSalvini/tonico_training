@@ -1,4 +1,3 @@
-
 #' tt Delete Module
 #'
 #' This module is for deleting a row's information from the tt database file
@@ -18,7 +17,7 @@ tt_delete_module <- function(input, output, session, modal_title, tt_to_delete, 
   # Observes trigger for this module (here, the Delete Button)
   observeEvent(modal_trigger(), {
     # Authorize who is able to access particular buttons (here, modules)
-    req(session$userData$email == 'giacomopeggion@gmail.com')
+    req(session$userData$email == 'niccolo.salvini27@gmail.com')
     
     showModal(
       modalDialog(
@@ -29,7 +28,7 @@ tt_delete_module <- function(input, output, session, modal_title, tt_to_delete, 
             style = "line-height: 1.75;",
             paste0(
               'Are you sure you want to delete client: "',
-              tt_to_delete()$client_name, " " ,tt_to_delete()$client_surname,
+              tt_to_delete()$client_name, " ",tt_to_delete()$client_surname,
               '"?'
             )
           )
