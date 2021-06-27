@@ -14,6 +14,7 @@ conn <- dbConnect(RPostgres::Postgres(),
                   user     = db_config$username, 
                   password = db_config$password) 
 
+
 # Create a query to prepare the tonico_training db table with additional 'uid', 'id',
 # & the 4 created/modified columns
 create_clients_info_query = "CREATE TABLE clients_info (
@@ -56,16 +57,44 @@ create_clients_measurements_query = "CREATE TABLE clients_measurements (
       REFERENCES clients_info(uid)
 )"
 
+## TODO: cambiare questo con column from nutrition plan
+create_clients_nutrition_plans = "CREATE TABLE clients_nutrition (
+  measurement_id                  TEXT UNIQUE,
+  uid_client                      TEXT,
+  form_name                       VARCHAR(100),
+  form_surname                    VARCHAR(100),
+  measurement_day                 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  height                          NUMERIC,
+  weight                          NUMERIC,
+  body_fat                        NUMERIC,
+  fat                             NUMERIC,
+  body_muscle                     NUMERIC,
+  muscle                          NUMERIC,
+  created_at                      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  created_by                      TEXT,
+  modified_at                     TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  modified_by                     TEXT,
+  PRIMARY KEY(measurement_id),
+  CONSTRAINT fk_measurement
+    FOREIGN KEY(uid_client) 
+        REFERENCES clients_info(uid)
+)"
 
 
 # dbExecute() executes a SQL statement with a connection object
 # Drop the table if it already exists
 dbExecute(conn, "DROP TABLE IF EXISTS clients_info CASCADE")
 dbExecute(conn, "DROP TABLE IF EXISTS clients_measurements CASCADE")
+dbExecute(conn, "DROP TABLE IF EXISTS clients_nutrition CASCADE")
+
 # Execute the query created above
 dbExecute(conn, create_clients_info_query)
 dbExecute(conn, create_clients_measurements_query)
+dbExecute(conn, create_clients_nutrition_plans)
 
+
+
+# clients_info INSERT
 # Read in the RDS file created in 'data_prep.R'
 dat <- readRDS(here::here("data", "prepped", "clients_info.RDS"))
 
