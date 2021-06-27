@@ -1,0 +1,6 @@
+default:
+  tonicodb:
+    host: !expr Sys.getenv("PG_HRK_HOST")
+    username: !expr Sys.getenv("PG_HRK_USER")
+    password: !expr Sys.getenv("PG_HRK_PWD")
+    dbname: !expr Sys.getenv("PG_HRK_DBNAM")

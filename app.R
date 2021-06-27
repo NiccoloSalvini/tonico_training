@@ -11,10 +11,10 @@ library(ggplot2)
 
 ## theme -----
 source(here::here("theme_TT.R"))
-
+source(here::here("global.R"))
 
 ## load data -----
-fake_db = readRDS(here::here("data", "fake_db.Rds"))
+fake_db <- readRDS(here::here("data", "fake_db.Rds"))
 
 
 ### * Dash Header ----
@@ -94,18 +94,17 @@ sidebar <- dashboardSidebar(
   ),
   sidebarMenu(
     menuItem("Athlete Dashboard", tabName = "dash", icon = icon("dashboard")),
-    menuItem("Diet", tabName = "diet", icon = icon("pizza-slice")),
-    menuItem("Exercises", tabName = "exercises", icon = icon("running")), 
+    menuItem("Nutrition", tabName = "diet", icon = icon("pizza-slice")),
+    menuItem("Exercises", tabName = "exercises", icon = icon("running")),
     menuItem("Database", tabName = "db", icon = icon("database")),
     menuItem("Form", tabName = "form", icon = icon("list-ul"))
-    
   ),
   ## source
   sidebarMenu(
-  menuItem("  Source Code",
-    icon = icon("file-code-o"),
-    href = "https://github.com/NiccoloSalvini"
-  )
+    menuItem("  Source Code",
+      icon = icon("file-code-o"),
+      href = "https://github.com/NiccoloSalvini"
+    )
   )
 )
 
@@ -117,29 +116,28 @@ body <- dashboardBody(
     tags$link(rel = "stylesheet", type = "text/css", href = "style.css")
   ),
 
- 
+
   tabItems(
-    
+
     ### diet ----
     tabItem(
       tabName = "diet",
-      
+
       fluidRow(
-          tabBox(
-            title = "Free Text",
-            id = "freetext", side = "left", height = "250px",
-            textAreaInput("freetextArea", label = tags$p(fa("fas fa-pencil-alt", fill = "red", height = "20px"), "Type in..."), height = "100px")
-          ),
-          tabBox(
-            title = "Remeber Text Box",
-            # The id lets us use input$tabset1 on the server to find the current tab
-            id = "remeberbox", side = "right", height = "250px",
-            textAreaInput("rememberArea", label = tags$p(fa("fas fa-pencil-alt", fill = "red", height = "20px"), "Type in..."), height = "100px")
-          )
+        tabBox(
+          title = "Free Initial Text",
+          id = "freetext", side = "left", height = "250px",
+          textAreaInput("freetextArea", label = tags$p(fa("fas fa-pencil-alt", fill = "red", height = "20px"), "Type in..."), height = "100px")
         ),
-      
+        tabBox(
+          title = "Remeber Text Box",
+          # The id lets us use input$tabset1 on the server to find the current tab
+          id = "remeberbox", side = "right", height = "250px",
+          textAreaInput("rememberArea", label = tags$p(fa("fas fa-pencil-alt", fill = "red", height = "20px"), "Type in..."), height = "100px")
+        )
+      ),
+
       fluidRow(
-        
         tabBox(
           title = "Every Day tips",
           id = "everydaytips", side = "left", height = "250px",
@@ -150,66 +148,112 @@ body <- dashboardBody(
           id = "goalbox", side = "right", height = "250px",
           textAreaInput("goalArea", label = tags$p(fa("fas fa-pencil-alt", fill = "red", height = "20px"), "Type in..."), height = "100px")
         ),
-        
-      fluidRow(
-        
-        tabBox(
+
+        fluidRow(
+          tabBox(
             title = "Daily targets",
             id = "dailytargets", side = "left", height = "250px",
             textAreaInput("targetsArea", label = tags$p(fa("fas fa-pencil-alt", fill = "red", height = "20px"), "Type in..."), height = "100px")
-          )),
-      
-      fluidRow(
-        
-        tabBox(
-            title = "See User Inputs", id = "tabset1", side = "right", height = "250px",
-            DT::dataTableOutput("datatable")
           ),
           tabBox(
-            title = "Choose Donwload option", id = "tabset3", side = "right", height = "250px",
-            
-            column(2, radioButtons(
-              inputId = "report_format",
-              label = "Format of report",
-              choices = c("PDF" = "pdf", "DOCX" = "docx")
-            )),
-            column(2, textInput(
-              inputId = "reportAuthor",
-              label = "Author"
-            )),
-            column(2, dateInput(
-              inputId = "reportDate",
-              label = "Date",
-              value = lubridate::today(),
-              format = "dd-mm-yyyy"
-            )),
-            column(2, textInput(
-              inputId = "reportClient",
-              label = "Client"
-            )),
-            tags$hr(),
-            br(),
-            br(),
-            p(
-              strong("Recommendation: "), "Report generation can be faster and more reliable when you first check
-             sections of intended contents. For example, if you wish to include a ", strong("3PL IRT"),
-              " model, you can first visit the ", strong("Dichotomous models"), " subsection of the ",
-              strong("IRT models"), "section and fit the ", strong("3PL IRT"), " model."
+            title = "Energy Intake",
+            id = "energybox", side = "right", height = "250px",
+            sliderInput("MonEnergyArea",
+              label = "Monday Kcal's",
+              min = 0,
+              max = 7000,
+              value = 2000,
+              step = 200
             ),
-            br(),
-            div(
-              style = "display:inline-block",
-              actionButton(
-                inputId = "generate",
-                label = "Generate report",
-                class = "btn btn-primary",
-                icon = icon("bar-chart-o")
-              )
-            ),
-            tags$style(HTML("#download_report_button { margin-left: 25px }")),
-            div(style = "display:inline-block", uiOutput("download_report_button"))
+            sliderInput("TueEnergyArea",
+              label = "Tuesday Kcal's",
+              min = 0,
+              max = 7000,
+              value = 2000,
+              step = 200
+            )
+            # sliderInput("WedEnergyArea",
+            #   label = "Wedneday Kcal's",
+            #   min = 0,
+            #   max = 7000,
+            #   value = 2000,
+            #   step = 200
+            # ),
+            # sliderInput("ThuEnergyArea",
+            #   label = "Thursday Kcal's",
+            #   min = 0,
+            #   max = 7000,
+            #   value = 2000,
+            #   step = 200
+            # ),
+            # sliderInput("FriEnergyArea",
+            #   label = "Friday Kcal's",
+            #   min = 0,
+            #   max = 7000,
+            #   value = 2000,
+            #   step = 200
+            # ),
+            # sliderInput("SatEnergyArea",
+            #   label = "Saturday Kcal's",
+            #   min = 0,
+            #   max = 7000,
+            #   value = 2000,
+            #   step = 200
+            # )
           )
-        )
+        ),
+
+
+        # fluidRow(),
+          
+          fluidRow(
+            tabBox(
+              title = "Choose Download options", id = "tabset3", side = "right", height = "250px",
+
+              column(
+                2,
+                radioButtons(
+                  inputId = "report_format",
+                  label = "Format of report",
+                  choices = c("PDF" = "pdf", "DOCX" = "docx")
+                ),
+                textInput(
+                  inputId = "reportAuthor",
+                  label = "Author"
+                )
+              ),
+              dateInput(
+                inputId = "reportDate",
+                label = "Date",
+                value = lubridate::today(),
+                format = "dd-mm-yyyy"
+              ),
+              textInput(
+                inputId = "reportClient",
+                label = "Client"
+              ),
+              box(
+                div(
+                  style = "display:inline-block",
+                  actionButton(
+                    inputId = "generate",
+                    label = "Generate report",
+                    class = "btn btn-primary",
+                    icon = icon("bar-chart-o")
+                  )
+                ),
+                tags$style(
+                  HTML(
+                    "#download_report_button { margin-left: 25px }"
+                  )
+                ),
+                div(
+                  style = "display:inline-block",
+                  uiOutput("download_report_button")
+                )
+              )
+            )
+          )
       ),
     ),
 
@@ -218,13 +262,16 @@ body <- dashboardBody(
       tabName = "dash",
       fluidRow(
         tabBox(
-        selectInput(inputId = "athlete",
-                    label = "Athelete Surname",
-                    choices = fake_db$surname)
-        )),
+          selectInput(
+            inputId = "athlete",
+            label = "Athelete Surname",
+            choices = fake_db$surname
+          )
+        )
+      ),
       ## 1st row infoboxes
       fluidRow(
-        infoBox("BMI index",25, icon = icon("heartbeat"), fill = TRUE),
+        infoBox("BMI index", 25, icon = icon("heartbeat"), fill = TRUE),
         infoBoxOutput("progressBox"),
         infoBoxOutput("approvalBox")
       ),
@@ -239,17 +286,17 @@ body <- dashboardBody(
         tabPanel(
           title = "Athletes table", side  = "left",
           reactableOutput("table")
-          )
         )
-      ),
+      )
+    ),
     ### form completion ----
     tabItem(
       tabName = "form",
       fluidRow(
-        infoBox("bih", 25 ,  icon = icon("heartbeat"))
-        )
-      ),
-    
+        infoBox("bih", 25, icon = icon("heartbeat"))
+      )
+    ),
+
     ### database ----
     tabItem(
       tabName = "db",
@@ -257,17 +304,15 @@ body <- dashboardBody(
         shinyFeedback::useShinyFeedback(),
         shinyjs::useShinyjs(),
         # Application Title
-        h1("Explore Yssup records", align = 'center'),
-        yssup_table_module_ui("yssup_table")
-      )
-     
+        h1("Interact with Tonico Traning DB clients", align = "center"),
+        tt_table_module_ui("tt_table")
       )
     )
+  )
 )
 
 ## * UI ----
 ui <- dashboardPage(
-
   skin = "red",
   header,
   sidebar,
@@ -277,12 +322,12 @@ ui <- dashboardPage(
 
 ## * Server ----
 server <- function(input, output, session) {
-  
+
   ## module call
-  session$userData$email <- 'niccolo.salvini27@gmail.com'
+  session$userData$email <- "niccolo.salvini27@gmail.com"
   print(getwd())
-  
-  
+
+
   ###  progress bar ----
   observeEvent(input$generate, {
     withProgress(message = "Creating content", value = 0, style = "notification", {
@@ -294,11 +339,10 @@ server <- function(input, output, session) {
         freetext = input$freetextArea,
         targets = input$targetsArea,
         tips = input$tipsArea
-        
       )
     })
   })
-  
+
   ###  Donwload Button ----
   output$download_report_button <- renderUI({
     if (is.null(input$generate)) {
@@ -311,14 +355,13 @@ server <- function(input, output, session) {
     )
   })
 
-  
+
   ###  Download Report ----
   output$report <- downloadHandler(
     filename = reactive({
       paste0("report.", input$report_format)
     }),
     content = function(file) {
-      
       reportPath <- here::here(glue::glue("report{input$report_format}.Rmd"))
       parameters <- list(
         author = input$reportAuthor,
@@ -329,7 +372,6 @@ server <- function(input, output, session) {
         freetext = input$freetextArea,
         targets = input$targetsArea,
         tips = input$tipsArea
-        
       )
       rmarkdown::render(reportPath,
         output_file = file,
@@ -383,31 +425,34 @@ server <- function(input, output, session) {
       stringsAsFactors = FALSE
     )
   })
-  
+
   output$table <- renderReactable({
-    reactable(fake_db, filterable = TRUE, 
-              showPageSizeOptions = TRUE,
-              highlight = TRUE,
-              columns = list(
-                bmi_index = colDef(filterable = FALSE, format = colFormat(digits = 2)),
-                height = colDef(filterable = FALSE, format = colFormat(digits = 2)),
-                weight = colDef(filterable = FALSE,  format = colFormat(digits = 2))
-                ),
-              theme = reactableTheme(
-                borderColor = "#8a2f2c",
-                stripedColor = "#8a2f2c"
-                )
-              )
+    reactable(fake_db,
+      filterable = TRUE,
+      showPageSizeOptions = TRUE,
+      highlight = TRUE,
+      columns = list(
+        bmi_index = colDef(filterable = FALSE, format = colFormat(digits = 2)),
+        height = colDef(filterable = FALSE, format = colFormat(digits = 2)),
+        weight = colDef(filterable = FALSE, format = colFormat(digits = 2))
+      ),
+      theme = reactableTheme(
+        borderColor = "#8a2f2c",
+        stripedColor = "#8a2f2c"
+      )
+    )
   })
-  
-  
 
-  # Call the server function portion of the `yssup_table_module.R` module file
+
+
+  # Call the server function portion of the `tt_table_module.R` module file
   callModule(
-    yssup_table_module,
-     "yssup_table"
+    tt_table_module,
+    "tt_table"
   )
-
 }
 
-shinyApp(ui,server)
+shinyApp(ui, server)
+#
+# shiny::runApp(display.mode="showcase")
+# options(shiny.reactlog=TRUE)

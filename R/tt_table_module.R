@@ -1,6 +1,6 @@
-#' Yssup Table Module UI
+#' tt Table Module UI
 #'
-#' The UI portion of the module for displaying the yssup datatable
+#' The UI portion of the module for displaying the tt datatable
 #'
 #' @importFrom shiny NS tagList fluidRow column actionButton tags
 #' @importFrom DT DTOutput
@@ -10,7 +10,7 @@
 #'
 #' @return a \code{shiny::\link[shiny]{tagList}} containing UI elements
 #'
-yssup_table_module_ui <- function(id) {
+tt_table_module_ui <- function(id) {
   ns <- NS(id)
   
   tagList(
@@ -18,8 +18,8 @@ yssup_table_module_ui <- function(id) {
       column(
         width = 2,
         actionButton(
-          ns("add_yssup"),
-          "Add",
+          ns("add_tt"),
+          "Add New Client",
           class = "btn-success",
           style = "color: #fff;",
           icon = icon('plus'),
@@ -33,20 +33,20 @@ yssup_table_module_ui <- function(id) {
       column(
         width = 12,
         title = "Motor Trend Car Road Tests",
-        DTOutput(ns('yssup_table')) %>%
+        DTOutput(ns('tt_table')) %>%
           withSpinner(),
         tags$br(),
         tags$br()
       )
     ),
-    tags$script(src = "yssup_table_module.js"),
-    tags$script(paste0("yssup_table_module_js('", ns(''), "')"))
+    tags$script(src = "tt_table_module.js"),
+    tags$script(paste0("tt_table_module_js('", ns(''), "')"))
   )
 }
 
-#' Yssup Table Module Server
+#' tt Table Module Server
 #'
-#' The Server portion of the module for displaying the yssup datatable
+#' The Server portion of the module for displaying the tt datatable
 #'
 #' @importFrom shiny reactive reactiveVal observeEvent req callModule eventReactive
 #' @importFrom DT renderDT datatable replaceData dataTableProxy
@@ -58,19 +58,19 @@ yssup_table_module_ui <- function(id) {
 #'
 #' @return None
 
-yssup_table_module <- function(input, output, session) {
+tt_table_module <- function(input, output, session) {
   
-  # trigger to reload data from the "yssup" table
-  session$userData$yssup_trigger <- reactiveVal(0)
+  # trigger to reload data from the "tt" table
+  session$userData$tt_trigger <- reactiveVal(0)
   
-  # Read in "yssup" table from the database
-  yssup <- reactive({
-    session$userData$yssup_trigger()
+  # Read in "tt" table from the database
+  tt <- reactive({
+    session$userData$tt_trigger()
     
     out <- NULL
     tryCatch({
       out <- conn %>%
-        tbl('yssup') %>%
+        tbl('clients_info') %>%
         collect() %>%
         mutate(
           created_at = as.POSIXct(created_at, tz = "UTC"),
@@ -80,7 +80,7 @@ yssup_table_module <- function(input, output, session) {
     }, error = function(err) {
       
       
-      msg <- "Database Connection Error"
+      msg <- "Tonico Training DB Connection Error"
       # print `msg` so that we can find it in the logs
       print(msg)
       # print the actual error to log it
@@ -94,10 +94,10 @@ yssup_table_module <- function(input, output, session) {
   })
   
   
-  yssup_table_prep <- reactiveVal(NULL)
+  tt_table_prep <- reactiveVal(NULL)
   
-  observeEvent(yssup(), {
-    out <- yssup()
+  observeEvent(tt(), {
+    out <- tt()
     
     ids <- out$uid
     
@@ -114,52 +114,33 @@ yssup_table_module <- function(input, output, session) {
     out <- out %>%
       select(-uid)
     
-    # Set the Action Buttons row to the first column of the `yssup` table
+    # Set the Action Buttons row to the first column of the `tt` table
     out <- cbind(
       tibble(" " = actions),
       out
     )
     
-    if (is.null(yssup_table_prep())) {
+    if (is.null(tt_table_prep())) {
       # loading data into the table for the first time, so we render the entire table
       # rather than using a DT proxy
-      yssup_table_prep(out)
+      tt_table_prep(out)
       
     } else {
       
       # table has already rendered, so use DT proxy to update the data in the
       # table without rerendering the entire table
-      replaceData(yssup_table_proxy, out, resetPaging = FALSE, rownames = FALSE)
+      replaceData(tt_table_proxy, out, resetPaging = FALSE, rownames = FALSE)
       
     }
   })
   
-  output$yssup_table <- renderDT({
-    req(yssup_table_prep())
-    out <- yssup_table_prep()
+  output$tt_table <- renderDT({
+    req(tt_table_prep())
+    out <- tt_table_prep()
     
     datatable(
       out,
       rownames = FALSE,
-      # rownames = c(
-      #   "Arianna Presciutti", "Blandina Allegra", "Bulgarini Ginevra",
-      #   "Ciaramella Cecilia", "Curelli Chiara", " Disa Lucrezia",
-      #   "Fallani Margherita", " Fanfani Bianca", " Galli Lucrezia",
-      #   "Galullo Francesca", "Godereccia Ortigia", "Gramigni Margherita",
-      #   "Iandelli Rebecca", "Iavicoli Giulia", "Lega Irene",
-      #   "Maggia Lidia", "Manini Giulia", "Marchi Margherita",
-      #   "Marra Gaia", "Martinelli Elena", "Mengoni Matilde",
-      #   "Milli Caterina", "Molesti Camilla", "O Braian Tara",
-      #   "Paoletti Bianca", "Presciutti Ester", "Quercetti Giulia",
-      #   "Sottili Sofia", "Tagliafraschi Gaia", "De Vittorio Luna",
-      #   "Cioni Bianca", "Borri Lucrezia"
-      # ),
-      # colnames = c(
-      #   'Anzilotti Antonio', 'Baldi Duccio', 'Benci Francesco', 'Benedetti Umberto',
-      #   'Consiglio Giovanni', 'Fortuna Noah', 'Leoni Emanuele', 'Maresi Matteo',
-      #   'Nardi Alessandro', 'Peggion Giacomo', 'Piccini Cosimo', 'Riessler Lorenzo',
-      #   'Scialdone Pietro', 'Created At', 'Created By', 'Modified At', 'Modified By'
-      #   ),
       selection = "none",
       class = "compact stripe row-border nowrap",
       # Escape the HTML in all except 1st column (which has the buttons)
@@ -173,7 +154,7 @@ yssup_table_module <- function(input, output, session) {
           list(
             extend = "excel",
             text = "Download",
-            title = paste0("yssup-", Sys.Date()),
+            title = paste0("tt-", Sys.Date()),
             exportOptions = list(
               columns = 1:(length(out) - 1)
             )
@@ -190,48 +171,49 @@ yssup_table_module <- function(input, output, session) {
     ) %>%
       formatDate(
         columns = c("created_at", "modified_at"),
-        method = 'toLocaleString'
+        method = 'toLocaleString',
+        params = list("se", list(timeZone = "Europe/London")) ## hereeeeeeeeeeeeeeeeeeeeeeeeee
       )
     
   })
   
-  yssup_table_proxy <- DT::dataTableProxy('yssup_table')
+  tt_table_proxy <- DT::dataTableProxy('tt_table')
   
   callModule(
-    yssup_edit_module,
-    "add_yssup",
-    modal_title = "Add Yssup",
-    yssup_to_edit = function() NULL,
-    modal_trigger = reactive({input$add_yssup})
+    tt_edit_module,
+    "add_tt",
+    modal_title = "Add tt",
+    tt_to_edit = function() NULL,
+    modal_trigger = reactive({input$add_tt})
   )
   
-  yssup_to_edit <- eventReactive(input$yssup_id_to_edit, {
+  tt_to_edit <- eventReactive(input$tt_id_to_edit, {
     
-    yssup() %>%
-      filter(uid == input$yssup_id_to_edit)
+    tt() %>%
+      filter(uid == input$tt_id_to_edit)
   })
   
   callModule(
-    yssup_edit_module,
-    "edit_yssup",
-    modal_title = "Edit Yssup",
-    yssup_to_edit = yssup_to_edit,
-    modal_trigger = reactive({input$yssup_id_to_edit})
+    tt_edit_module,
+    "edit_tt",
+    modal_title = "Edit tt",
+    tt_to_edit = tt_to_edit,
+    modal_trigger = reactive({input$tt_id_to_edit})
   )
   
-  yssup_to_delete <- eventReactive(input$yssup_id_to_delete, {
+  tt_to_delete <- eventReactive(input$tt_id_to_delete, {
     
-    out <- yssup() %>%
-      filter(uid == input$yssup_id_to_delete) %>%
+    out <- tt() %>%
+      filter(uid == input$tt_id_to_delete) %>%
       as.list()
   })
   
   callModule(
-    yssup_delete_module,
-    "delete_yssup",
-    modal_title = "Delete Yssup",
-    yssup_to_delete = yssup_to_delete,
-    modal_trigger = reactive({input$yssup_id_to_delete})
+    tt_delete_module,
+    "delete_tt",
+    modal_title = "Delete tt",
+    tt_to_delete = tt_to_delete,
+    modal_trigger = reactive({input$tt_id_to_delete})
   )
   
 }

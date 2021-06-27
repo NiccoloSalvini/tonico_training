@@ -9,18 +9,32 @@ library(lubridate, quietly = T, warn.conflicts = F)
 library(shinyFeedback, quietly = T, warn.conflicts = F)
 library(dplyr, quietly = T, warn.conflicts = F)
 library(dbplyr, quietly = T, warn.conflicts = F)
+library(config, quietly = T, warn.conflicts = F)
 
 
+## new shit
+# library(processx)
+# library(RPostgres)
+# library(httr)
+# library(dbplyr)
+# 
 # db_config <- config::get()$db
+# 
+# download heroku CLI CHECK
+# try to move path to heroku cli 
+# chiaramente non sente il comando 
+# 
+# config <- run("heroku", c("config:get", "PG_HRK_HOST", "-a", "tonico-training-db"))
+
+db_config <- config::get()$tonicodb
 
 
 conn <- dbConnect(RPostgres::Postgres(),
-                  dbname = "d48t7csiftocvo", 
-                  host='ec2-52-19-96-181.eu-west-1.compute.amazonaws.com', 
-                  port="5432", 
-                  user="udknpypytovowv", 
-                  password="6c19e250350d95a8f6fbf83c3bd83ce19e701f6be6497c08a0f943c1021c357f")  
-
+                  port = 5432,
+                  dbname   = db_config$dbname, 
+                  host     = db_config$host, 
+                  user     = db_config$username, 
+                  password = db_config$password) 
 
 # # Create database connection
 # conn <- dbConnect(

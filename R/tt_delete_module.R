@@ -1,19 +1,18 @@
-
-#' Yssup Delete Module
+#' tt Delete Module
 #'
-#' This module is for deleting a row's information from the yssup database file
+#' This module is for deleting a row's information from the tt database file
 #'
 #' @importFrom shiny observeEvent req showModal h3 modalDialog removeModal actionButton modalButton
 #' @importFrom DBI dbExecute
 #' @importFrom shinyFeedback showToast
 #'
 #' @param modal_title string - the title for the modal
-#' @param yssup_to_delete string - the model of the yssup to be deleted
+#' @param tt_to_delete string - the model of the tt to be deleted
 #' @param modal_trigger reactive trigger to open the modal (Delete button)
 #'
 #' @return None
 #'
-yssup_delete_module <- function(input, output, session, modal_title, yssup_to_delete, modal_trigger) {
+tt_delete_module <- function(input, output, session, modal_title, tt_to_delete, modal_trigger) {
   ns <- session$ns
   # Observes trigger for this module (here, the Delete Button)
   observeEvent(modal_trigger(), {
@@ -28,8 +27,8 @@ yssup_delete_module <- function(input, output, session, modal_title, yssup_to_de
           h2(
             style = "line-height: 1.75;",
             paste0(
-              'Are you sure you want to delete the "',
-              yssup_to_delete()$tipette,
+              'Are you sure you want to delete client: "',
+              tt_to_delete()$client_name, " ",tt_to_delete()$client_surname,
               '"?'
             )
           )
@@ -40,7 +39,7 @@ yssup_delete_module <- function(input, output, session, modal_title, yssup_to_de
           modalButton("Cancel"),
           actionButton(
             ns("submit_delete"),
-            "Delete yssup",
+            "Delete tt",
             class = "btn-danger",
             style="color: #fff;"
           )
@@ -50,25 +49,25 @@ yssup_delete_module <- function(input, output, session, modal_title, yssup_to_de
   })
   
   observeEvent(input$submit_delete, {
-    req(yssup_to_delete())
+    req(tt_to_delete())
     
     removeModal()
     
     tryCatch({
       
-      uid <- yssup_to_delete()$uid
+      uid <- tt_to_delete()$uid
       
       DBI::dbExecute(
         conn,
-        "DELETE FROM yssup WHERE uid=$1",
+        "DELETE FROM tt WHERE uid=$1",
         params = c(uid)
       )
       
-      session$userData$yssup_trigger(session$userData$yssup_trigger() + 1)
-      showToast("success", "yssup Successfully Deleted")
+      session$userData$tt_trigger(session$userData$tt_trigger() + 1)
+      showToast("success", "tt client Successfully Deleted")
     }, error = function(error) {
       
-      msg <- "Error Deleting yssup"
+      msg <- "Error Deleting tt client"
       # print `msg` so that we can find it in the logs
       print(msg)
       # print the actual error to log it
