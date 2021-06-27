@@ -8,6 +8,7 @@ library(glue)
 library(here)
 library(reactable)
 library(ggplot2)
+library(DTedit)
 
 ## theme -----
 source(here::here("theme_TT.R"))
@@ -442,8 +443,6 @@ server <- function(input, output, session) {
       )
     )
   })
-
-
 
   # Call the server function portion of the `tt_table_module.R` module file
   callModule(
