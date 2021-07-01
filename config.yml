@@ -4,3 +4,6 @@ default:
     username: !expr Sys.getenv("PG_HRK_USER")
     password: !expr Sys.getenv("PG_HRK_PWD")
     dbname: !expr Sys.getenv("PG_HRK_DBNAM")
+    
+  met_equi:
+    equivalents: !expr equivalents =  readRDS(here::here("data", "prepped", "met_equi.RDS"))
