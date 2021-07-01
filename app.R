@@ -1,18 +1,21 @@
 ## app.R ##
 
 
-## libraries ----
+  ## libraries ----
 library(shinydashboard)
 library(fontawesome)
 library(glue)
 library(here)
 library(reactable)
 library(ggplot2)
-library(DTedit)
+library(DTedit) # devtools::install_github('DavidPatShuiFong/DTedit@2.2.1')
 
 ## theme -----
 source(here::here("theme_TT.R"))
 source(here::here("global.R"))
+
+met_equi = config::get("met_equi")$equivalents
+
 
 ## load data -----
 fake_db <- readRDS(here::here("data", "fake_db.Rds"))
@@ -120,7 +123,7 @@ body <- dashboardBody(
 
   tabItems(
 
-    ### diet ----
+    ### nutrition plan ----
     tabItem(
       tabName = "diet",
 
@@ -148,7 +151,7 @@ body <- dashboardBody(
           title = "Goal Text Box",
           id = "goalbox", side = "right", height = "250px",
           textAreaInput("goalArea", label = tags$p(fa("fas fa-pencil-alt", fill = "red", height = "20px"), "Type in..."), height = "100px")
-        ),
+        )),
 
         fluidRow(
           tabBox(
@@ -173,43 +176,20 @@ body <- dashboardBody(
               value = 2000,
               step = 200
             )
-            # sliderInput("WedEnergyArea",
-            #   label = "Wedneday Kcal's",
-            #   min = 0,
-            #   max = 7000,
-            #   value = 2000,
-            #   step = 200
-            # ),
-            # sliderInput("ThuEnergyArea",
-            #   label = "Thursday Kcal's",
-            #   min = 0,
-            #   max = 7000,
-            #   value = 2000,
-            #   step = 200
-            # ),
-            # sliderInput("FriEnergyArea",
-            #   label = "Friday Kcal's",
-            #   min = 0,
-            #   max = 7000,
-            #   value = 2000,
-            #   step = 200
-            # ),
-            # sliderInput("SatEnergyArea",
-            #   label = "Saturday Kcal's",
-            #   min = 0,
-            #   max = 7000,
-            #   value = 2000,
-            #   step = 200
-            # )
           )
         ),
-
-
-        # fluidRow(),
-          
-          fluidRow(
-            tabBox(
-              title = "Choose Download options", id = "tabset3", side = "right", height = "250px",
+      
+      ## metabolic equivalents 
+      fluidRow(
+        tabBox(width = 12,
+          h3('Grocery List'),
+          tt_dtedit_module_ui('dt_edit_table')
+          )
+        ),
+      
+      fluidRow(
+        tabBox(
+          title = "Choose Download options", id = "tabset3", side = "right", height = "250px",
 
               column(
                 2,
@@ -256,7 +236,6 @@ body <- dashboardBody(
             )
           )
       ),
-    ),
 
     ###  athlete ----
     tabItem(
@@ -449,6 +428,10 @@ server <- function(input, output, session) {
     tt_table_module,
     "tt_table"
   )
+  # call the dt module 
+  callModule(
+    tt_dtedit_module, 
+    'dt_edit_table')
 }
 
 shinyApp(ui, server)
