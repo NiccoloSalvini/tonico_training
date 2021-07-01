@@ -73,8 +73,8 @@ tt_table_module <- function(input, output, session) {
         tbl('clients_info') %>%
         collect() %>%
         mutate(
-          created_at = as.POSIXct(created_at, tz = "UTC"),
-          modified_at = as.POSIXct(modified_at, tz = "UTC")
+          created_at = as.POSIXct(created_at, tz = "Europe/London"),
+          modified_at = as.POSIXct(modified_at, tz = "Europe/London")
         ) %>%
         arrange(desc(modified_at))
     }, error = function(err) {
@@ -172,7 +172,7 @@ tt_table_module <- function(input, output, session) {
       formatDate(
         columns = c("created_at", "modified_at"),
         method = 'toLocaleString',
-        params = list("se", list(timeZone = "Europe/London")) ## hereeeeeeeeeeeeeeeeeeeeeeeeee
+        params = list("se", list(timeZone = "Europe/London")) 
       )
     
   })
@@ -182,7 +182,7 @@ tt_table_module <- function(input, output, session) {
   callModule(
     tt_edit_module,
     "add_tt",
-    modal_title = "Add tt",
+    modal_title = "Add Client to Tonico Training DB",
     tt_to_edit = function() NULL,
     modal_trigger = reactive({input$add_tt})
   )
@@ -196,7 +196,7 @@ tt_table_module <- function(input, output, session) {
   callModule(
     tt_edit_module,
     "edit_tt",
-    modal_title = "Edit tt",
+    modal_title = "Edit Client to Tonico Training DB",
     tt_to_edit = tt_to_edit,
     modal_trigger = reactive({input$tt_id_to_edit})
   )
@@ -211,7 +211,7 @@ tt_table_module <- function(input, output, session) {
   callModule(
     tt_delete_module,
     "delete_tt",
-    modal_title = "Delete tt",
+    modal_title = "Delete Client from Tonico Training DB",
     tt_to_delete = tt_to_delete,
     modal_trigger = reactive({input$tt_id_to_delete})
   )
